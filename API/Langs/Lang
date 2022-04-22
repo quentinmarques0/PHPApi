@@ -11,9 +11,9 @@ class Lang {
         foreach($lines as $line)
         {
             $splitArray = split("=", $line);
-            if($splitArray[0] == $str)
+            if(trim($splitArray[0]) == $str)
             {
-                return $splitArray[1];
+                return trim($splitArray[1]);
             }
         }
         return $str;
