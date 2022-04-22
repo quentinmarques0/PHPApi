@@ -5,7 +5,7 @@
      |
      |____Class
      |      |
-     |      |____<span style="color=red">Page</span>   (Type : Method)
+     |      |____Page   (Type : Method)
      |      |      |
      |      |      |____ Page : __construct(...$args)
      |      |      |
