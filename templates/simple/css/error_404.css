@@ -1,0 +1,30 @@
+
+.error404 {
+font-size: 1000%;
+font-family: monospace;
+color: rgb(153, 153, 153);
+font-weight: 100;font-variant: oldstyle-nums;font-variant-caps: all-petite-caps;margin: -5px;margin-top: -30px;}
+
+.left-404 {
+    margin: 10%;text-align: left;
+    /* line-height: 5; */
+}
+
+.center-404 {
+    margin: 10%;text-align: center;
+    /* line-height: 5; */
+}
+body{
+    background-color: rgb(244, 255, 214);
+}
+hr {
+    
+margin: 0;}
+
+
+p {
+    font-size: 125%;
+    font-family: 'Courier New', Courier, monospace;
+    color: rgb(153, 153, 153);
+    /* font-weight: 100;font-variant: oldstyle-nums;font-variant-caps: all-petite-caps;margin: -5px;margin-top: -30px;} */
+    
