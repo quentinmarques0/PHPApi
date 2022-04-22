@@ -1,0 +1,27 @@
+<?php
+class Lang {
+    private static string $lang = "en_US";
+    public static function Translate($str)
+    {
+        if(!Files::exists("API/Langs/".Lang::$lang)) {
+            return $str;
+        }
+        //echo $str;
+        $lines = Files::ReadAllLines("API/Langs/".Lang::$lang);
+        foreach($lines as $line)
+        {
+            $splitArray = split("=", $line);
+            if($splitArray[0] == $str)
+            {
+                return $splitArray[1];
+            }
+        }
+        return $str;
+    }
+    public static function SetLang($lang)
+    {
+        if(Files::exists("API/Langs/$lang")) {
+            Lang::$lang = $lang;
+        }
+    }
+}

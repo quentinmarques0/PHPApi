@@ -6,4 +6,15 @@ class Files {
         if($result != 1) System::DebugClass("[Class: Files]","[Function: exists]","Path: $path", "Result: $result");
         return $result;
     }
+
+    public static function ReadAllLines($_file)
+    {
+        $arr = array();
+        if($file = fopen($_file, "r")){
+            while(!feof($file)){
+                array_push($arr, fgets($file));
+            }
+        }
+        return $arr;
+    }
 }

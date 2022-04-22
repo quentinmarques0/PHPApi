@@ -3,6 +3,8 @@ using("System");
 using("Util");
 Util::$Notifies = new ListNotifies();
 
+using("Langs/Lang");
+
 using("Class/Controller");
 using("Class/Page");
 using("Class/404");
@@ -51,10 +53,66 @@ class API {
 
     public static function Translate($line)
     {
-        $line = str_replace("{{", Core::StartPHP()." echo", $line);
-        $line = str_replace("}}",Core::EndPHP(),$line);
+        $action = 0;
+        $postAction = 1;
+        $arg = "";
+        if(str_contains($line, "{{") && str_contains($line, "}}")){
+            $action = Core::StartPHP()." echo";
+            $postAction = "".Core::EndPHP();
+            $arg = $line;
+            $arg = split("{{", $arg)[1];
+            $arg = split("}}", $arg)[0];
+            $arg = trim($arg);
 
-        return $line;
+
+            $prevChars = split("{{", $line)[0];
+            $nextChars = split("}}", $line)[1];
+        }
+        if(str_contains($line, "{%") && str_contains($line, "%}")){
+            $action = Core::StartPHP()." Templates::use_module(";
+            $postAction = ")".Core::EndPHP();
+            $arg = $line;
+            $arg = split("{%", $arg)[1];
+            $arg = split("%}", $arg)[0];
+            $arg = '"'.trim($arg).'"';
+
+            $prevChars = split("{%", $line)[0];
+            $nextChars = split("%}", $line)[1];
+        }
+        if(str_contains($line, "{#") and str_contains($line, "#}")){
+            $action = Core::StartPHP()." echo Lang::Translate(";
+            $postAction = ")".Core::EndPHP();
+            $arg = $line;
+            $arg = split("{#", $arg)[1];
+            $arg = split("#}", $arg)[0];
+            $arg = '"'.trim($arg).'"';
+
+            $prevChars = split("{#", $line)[0];
+            $nextChars = split("#}", $line)[1];
+        }
+
+        //echo $action;
+        if($action == 0) return $line;
+
+
+        $line = str_replace("{{", "", $line);
+        $line = str_replace("}}","",$line);
+
+        //Use_module
+        $line = str_replace("{%", "", $line);
+        $line = str_replace("%}","",$line);
+
+        //Translate Language
+        $line = str_replace("{#", "", $line);
+        $line = str_replace("#}","",$line);
+
+        //$arg = trim($line);
+        //echo $arg;
+
+        $code = $prevChars.$action.' '.$arg.' '.$postAction.$nextChars;
+
+        //echo $code;
+        return $code;
     }
 
     public static function RequireTranslate($_file)
@@ -63,7 +121,9 @@ class API {
         if($file = fopen($_file, "r")){
             while(!feof($file)){
                 $newLine = fgets($file);
+                if(trim($newLine) == "") continue;
                 $newLine = API::Translate($newLine);
+                //echo $newLine;
                 $line = $line.$newLine;
             }
         }

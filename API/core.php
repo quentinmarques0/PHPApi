@@ -36,3 +36,8 @@ class Core
         return '<?php';
     }
 }
+
+function split(string $pattern, string $string, int $limit = PHP_INT_MAX)
+{
+    return explode($pattern, $string, $limit);
+}
