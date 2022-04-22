@@ -1,0 +1,39 @@
+<?php
+class ListFunctions {
+    private $functionArray = array();
+    public function get($key) { 
+        $fn = null;
+        
+        foreach($this->functionArray as $function)
+        {
+            if($function->_get(0) == $key)
+            {
+                $fn = $function;
+            }
+        }
+
+        return $fn;
+    }
+    public function getAll(){
+        $mArray = array();
+        foreach($this->functionArray as $fn)
+        {
+            array_push($mArray, $fn);
+        }
+        return $mArray;
+    }
+    public function add($key, $file) { 
+        if($this->get($key) != null) return;
+        array_push( $this->functionArray, new Functions($key, $file) );
+    }
+
+    public function addFunction($function) { 
+        if($function == null) return;
+        array_push( $this->functionArray, $function );
+    }
+
+    public function size()
+    {
+        return count($this->functionArray);
+    }
+}

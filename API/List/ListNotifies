@@ -1,0 +1,34 @@
+<?php
+class ListNotifies {
+    private $notArray = array();
+    public function get($key) { 
+        $notify = null;
+        
+        foreach($this->notArray as $notifies)
+        {
+            if($module->_get(0) == $key)
+            {
+                $notify = $notifies;
+            }
+        }
+
+        return $notify;
+    }
+    public function getAll(){
+        $mArray = array();
+        foreach($this->notArray as $notify)
+        {
+            array_push($mArray, $notify);
+        }
+        return $mArray;
+    }
+
+    public function add($notify) { 
+        array_push( $this->notArray, $notify );
+    }
+
+    public function size()
+    {
+        return count($this->notArray);
+    }
+}

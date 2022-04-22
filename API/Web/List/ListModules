@@ -1,0 +1,41 @@
+<?php
+class ListModules {
+    private $moduleArray = array();
+    public function get($key) { 
+        $mod = null;
+        
+        foreach($this->moduleArray as $module)
+        {
+            if($module->_get(0) == $key)
+            {
+                $mod = $module;
+            }
+        }
+
+        return $mod;
+    }
+    public function getAll(){
+        $mArray = array();
+        foreach($this->moduleArray as $module)
+        {
+            array_push($mArray, $module);
+        }
+        return $mArray;
+    }
+
+    public function add($key, $file) { 
+        if($this->get($key) != null) return;
+        array_push( $this->moduleArray, new Modules($key, $file) );
+    }
+
+    public function addModule($module) { 
+        if($module == null) return;
+        array_push( $this->moduleArray, $module );
+    }
+    
+
+    public function size()
+    {
+        return count($this->moduleArray);
+    }
+}

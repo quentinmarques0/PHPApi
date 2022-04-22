@@ -1,0 +1,155 @@
+<?php
+class Controller {
+    private $_page = null;
+    private array $_argsArray;
+
+    public function __construct(...$args){
+        //$this->Start();
+        Templates::using(($args[0] ?? "simple"));
+    }
+
+    public function Start(...$args) {
+        $this->Update();
+    }
+    public function End(...$args) {
+
+    }
+
+    public function Update(...$args) {
+        
+        Util::waittill("page_show", function($args1){
+            if($args1 == true) return;
+        });
+        //echo "update";
+        //sleep(0.5);
+        //$this->Update();
+    }
+
+    public function GetTemplate(...$args) {
+        return Templates::get();
+    }
+    public function SetTemplate(...$args) {
+        Templates::set($args[0]);
+    }
+
+    public function GetModules(...$args) {
+        if(count($args) <= 0) return $this->GetTemplate()->get_modules();
+        if(count($args) == 1 && $args[0] == null) return $this->GetTemplate()->get_modules();
+
+        if($args[0] == '*') 
+        {
+            return $this->GetTemplate()->get_modules()->getAll();
+        }
+
+        $mArray = array();
+        foreach($args as $arg)
+        {
+            array_push($mArray, $this->GetModule($arg));
+        }
+
+        return $mArray;
+    }
+    public function AddModules(...$args) {
+        foreach($args as $arg)
+        {
+            $this->AddModule($arg);
+        }
+    }
+
+    public function GetModule(...$args) {
+        if(count($args) > 1) {
+            $this->GetModules($args);
+            return;
+        }
+        return $this->GetModules()->get($args[0]);
+    }
+    public function AddModule(...$args) {
+        if(count($args) > 1) {
+            $this->AddModules($args);
+            return;
+        }
+        if(is_a($args[0], Modules)){
+            $this->GetModules()->addModule($args[0]);
+        }
+        elseif(is_a($args[0], "array"))
+        {
+            $this->GetModules()->add($args[0][0], $args[0][1]);
+        }
+    }
+
+    public function GetFunctions(...$args) {
+        if(count($args) <= 0) return $this->GetTemplate()->get_functions();
+        if(count($args) == 1 && $args[0] == null) return $this->GetTemplate()->get_functions();
+
+        if($args[0] == '*') 
+        {
+            return $this->GetTemplate()->get_functions()->getAll();
+        }
+        $mArray = array();
+        foreach($args as $arg)
+        {
+            array_push($mArray, $this->GetFunction($arg));
+        }
+
+        return $mArray;
+    }
+    public function AddFunctions(...$args) {
+        foreach($args as $arg)
+        {
+            $this->AddFunction($arg);
+        }
+    }
+
+    public function GetFunction(...$args) {
+        if(count($args) > 1) {
+            return $this->GetFunctions($args);
+        }
+        return $this->GetFunctions()->get($args[0]);
+    }
+    public function AddFunction(...$args) {
+        if(count($args) > 1) {
+            $this->AddFunction($args);
+            return;
+        }
+        if(is_a($args[0], Functions)){
+            $this->GetFunctions()->addFunction($args[0]);
+        }
+        elseif(is_a($args[0], "array"))
+        {
+            $this->GetFunctions()->add($args[0][0], $args[0][1]);
+        }
+    }
+
+    //Redirect to page, with $args or not
+    public function RedirectTo(...$args) {
+
+    }
+
+    public function SetPage(...$args) {
+        if(Files::exists("pages/$args[0]"))
+        {
+            $this->_page = $args[0];
+            return;
+        }
+        $this->_page = null;
+    }
+    public function GetPage(...$args) {
+        return $this->_page;
+    }
+
+    public function SetPageArgs(...$args) {
+        foreach($args as $arg)
+        {
+            if(is_a($arg, "array"))
+            {
+                foreach($arg as $k => $v)
+                {
+                    if($k != null and $v != null) array_push($this->_argsArray, $arg);
+                }
+            }
+        }
+    }
+    public function GetPageArgs(...$args) {
+        return $this->_argsArray;
+    }
+}

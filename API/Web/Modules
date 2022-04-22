@@ -1,0 +1,32 @@
+<?php
+using("Web/List/ListModules");
+
+class Modules {
+    public $name, $file;
+
+    public function __construct($n, $f)
+    {
+        $this->name = $n;
+        $this->file = $f;
+    }
+
+    public static function register($name, $file)
+    {
+        return Templates::regMod($name, $file);
+    }
+
+    public function _get($index)//0 = name, 1 = file
+    {
+        if($index == 1) return $this->file;
+
+        return $this->name;
+    }
+
+    public static function get($key, $index = 1)//0 = name, 1 = file
+    {
+        $module = Templates::get()->get_modules()->get($key);
+        if($index == 1) return $module->file;
+
+        return $module->name;
+    }
+}

@@ -1,0 +1,166 @@
+<?php
+using("Directories");
+using("Files");
+using("Web/Functions");
+using("Web/Modules");
+
+$template = null;
+$template_directory = null;
+$template_module_args = null;
+$last_args = null;
+
+class Templates {
+    public static Templates $_template;
+    private array $pattern;
+    private ListModules $modules;
+    private ListFunctions $functions;
+    private string $name;
+
+    public function __construct(string $name)
+    {
+        $this->modules = new ListModules();
+        $this->functions = new ListFunctions();
+        $this->name = $name;
+    }
+
+    public function get_modules()
+    {
+        return $this->modules;
+    }
+
+    public function get_functions()
+    {
+        return $this->functions;
+    }
+    
+    public static function args(...$args) {
+        return $args;
+    }
+
+    public static function init($name) { Templates::set(new Templates($name)); }
+
+    public static function using($template_str)
+    {
+        global $template;
+        global $template_directory;
+
+        $path = Directories::get("templates");
+    
+        //get templates registered informations in 'register_template.php'                                                          (19/04/2022 14:03) Quentin M.
+        Templates::set(Templates::register($path, $template_str));
+        return Templates::get();
+    }
+
+
+    public static function register($path, $template_str)
+    {
+        global $template_directory;
+        $full_dir_path = Directories::combine($path, $template_str);
+        $full_dir_path = Directories::get($full_dir_path);
+    
+        $template_directory = $full_dir_path;
+    
+        $register_template_file = Directories::combine($full_dir_path, "register_template.php");
+    
+        //echo $register_template_file;
+        if(Files::exists($register_template_file))
+        {
+            return require($register_template_file);
+        }
+        return null;
+    }
+
+    public static function done()
+    {
+        return Templates::get();
+    }
+
+
+    public static function regMod($key, $value)
+    {
+        Templates::get()->get_modules()->add($key, $value);
+    }
+
+    public static function regFunc($key, $value)
+    {
+        Templates::get()->get_functions()->add($key, $value);
+    }
+
+    public static function use_asset($url)
+    {
+        return Directories::combine(Templates::get_directory(),$url);
+    }
+
+    public static function get_directory()
+    {
+        global $template_directory;
+        return $template_directory;
+    }
+
+    public static function set_directory($dir)
+    {
+        global $template_directory;
+        $template_directory = $dir;
+    }
+
+    public static function use_module($module_name, $args = null)
+    {
+        
+        global $last_args;
+        global $template_module_args;
+    
+        if($args != null) $template_module_args = $args[0];
+    
+        if(Templates::get() == null) return System::Debug("Template is null", "Please register a new template","or fix your 'register_template.php'");
+    
+        if(Templates::get()->get_modules()->size() <= 0) return System::Debug("Modules array is null", "Please register a new array 'modules'","or fix in your 'register_template.php' array");
+        if(Templates::get()->get_modules()->get($module_name) == null) return System::Debug("Module '$module_name' is null", "Please register a new module '$module_name'","or fix in your 'register_template.php' array");
+    
+        //phpref
+        //echo "o";
+        API::RequireTranslate(Directories::combine(Templates::get_directory(),Modules::get($module_name)));
+
+        //require( );
+    }
+
+    public static function use_function($function_name, $args = null)
+    {
+        if(Templates::get() == null) return System::Debug("Template is null", "Please register a new template","or fix your 'register_template.php'");
+    
+        if(Templates::get()->get_functions()->size() <= 0) return System::Debug("Functions array is null", "Please register a new array 'functions'","or fix in your 'register_template.php' array");
+        if(Templates::get()->get_functions()->get($function_name) == null) return System::Debug("Function '$function_name' is null", "Please register a new function '$function_name'","or fix in your 'register_template.php' array");
+    
+        return Templates::get()->get_functions()->get($function_name)->call($args);
+    }
+
+
+    public static function script($src)
+    {
+        return "<script src=\"".Directories::combine(Templates::get_directory(),$src)."\"></script>";
+    }
+
+    public static function link($rel, $href)
+    {
+        return "<link rel=\"$rel\" href=\"".Directories::combine(Templates::get_directory(),$href)."\">";
+    }
+
+    public static function require($e, $args = null)
+    {
+        Templates::set_mod_args($args);
+        return Directories::combine(Templates::get_directory(), $e);
+    }
+
+    public static function get() {
+        return Templates::$_template;
+    }
+
+    public static function set($temp) {
+        Templates::$_template = $temp;
+    }
+
+    public static function set_mod_args($args) {
+        global $template_module_args;
+        $template_module_args = $args;
+    }
+
+}

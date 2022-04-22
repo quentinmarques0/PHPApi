@@ -1,0 +1,38 @@
+<?php
+using("Web/List/ListFunctions");
+
+class Functions {
+    public $name, $fn;
+
+    public function __construct($n, $f)
+    {
+        $this->name = $n;
+        $this->fn = $f;
+    }
+
+    public function call($args)
+    {
+        $function = $this->fn;
+        return $function($args);
+    }
+
+    public static function register($name, $fn)
+    {
+        return Templates::regFunc($name, $fn);
+    }
+
+    public function _get($index)//0 = name, 1 = file
+    {
+        if($index == 1) return $this->fn;
+
+        return $this->name;
+    }
+
+    public static function get($key, $index = 1)//0 = name, 1 = fn
+    {
+        $function = Templates::get()->get_functions()->get($key);
+        if($index == 1) return $module->fn;
+
+        return $module->name;
+    }
+}

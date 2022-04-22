@@ -1,0 +1,85 @@
+<?php
+using("System");
+using("Util");
+Util::$Notifies = new ListNotifies();
+
+using("Class/Controller");
+using("Class/Page");
+using("Class/404");
+
+using("Web/Templates");
+using("Web/Routes");
+
+
+class API {
+    private static Routes $_Route;
+    private static Controller $_Controller;
+    private static ListRoutes $Routes;
+    public static string $RouteRequestStr = 'r';
+    public static function Routes(){
+        return API::$Routes;
+    }
+
+    public static function init()
+    {
+        API::$Routes = new ListRoutes();
+
+        $route404 = Routes::register("404", "_404", false);
+        $route404->page = new _404();
+    }
+
+    public static function setController(string $controller)
+    {
+        require("Controllers/$controller.php");
+        API::$_Controller = new $controller;
+    }
+
+    public static function getController()
+    {
+        return API::$_Controller;
+    }
+
+    public static function setInitialRoute(string $route, string $page)
+    {
+        API::$_Route = Routes::register("$route", "$page");
+    }
+
+    public static function getInitialRoute()
+    {
+        return API::$_Route;
+    }
+
+    public static function Translate($line)
+    {
+        $line = str_replace("{{", Core::StartPHP()." echo", $line);
+        $line = str_replace("}}",Core::EndPHP(),$line);
+
+        return $line;
+    }
+
+    public static function RequireTranslate($_file)
+    {
+        $line = "";
+        if($file = fopen($_file, "r")){
+            while(!feof($file)){
+                $newLine = fgets($file);
+                $newLine = API::Translate($newLine);
+                $line = $line.$newLine;
+            }
+        }
+        eval(Core::EndPHP()."$line");
+    }
+    
+}
+
+API::init();
+
+function phpref($ref, $tag = "href")
+{
+    return "$tag=\"?".API::$RouteRequestStr."=$ref\"";
+}
+
+function phpvar($key, $value)
+{
+    return "name=$key value=$value";
+}

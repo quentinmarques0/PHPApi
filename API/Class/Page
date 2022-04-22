@@ -1,0 +1,79 @@
+<?php
+class Page {
+    private Templates $template;
+    private bool $_html = false;
+    private bool $_head = false;
+    private bool $_body = false;
+    private string $_title = "";
+
+    public function __construct(...$args){
+        Templates::using($args[0]);
+    }
+
+    public function getTemplate()
+    {
+        if($this->$template == null) {
+            $this->$template = Templates::using("simple");
+        }
+        return $this->$template;
+    }
+
+    public function _GET(...$args) {
+        return $_GET;
+    }
+
+    public function _POST(...$args) {
+        return $_POST;
+    }
+
+    public function GoTo(Page $page) {
+
+    }
+
+    public function Show()
+    {
+        
+    }
+
+    public function HTML(...$args) {
+        $line = "html";
+        if($this->_html) $line = "/$line";
+        $this->_html = !$this->_html;
+        echo ("<$line>");
+    }
+
+    public function head(...$args) {
+        $line = "head";
+        if($this->_head) $line = "/$line";
+        $this->_head = !$this->_head;
+        echo ("<$line>");
+    }
+
+    public function body(...$args) {
+        $line = "body";
+        if($this->_body) $line = "/$line";
+        $this->_body = !$this->_body;
+        echo ("<$line>");
+    }
+    public function title(...$args) {
+        $this->_title = ($args[0] ?? "");
+        echo ("<title>$this->_title</title>");
+    }
+
+    public function buildBody($fn)
+    {
+        $this->body();
+
+        $fn();
+        
+        $this->body();
+    }
+    public function buildHead($fn)
+    {
+        $this->head();
+
+        $fn();
+        
+        $this->head();
+    }
+}

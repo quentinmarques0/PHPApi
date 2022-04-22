@@ -1,0 +1,60 @@
+<?php
+using("Web/List/ListRoutes");
+
+class Routes {
+    public string $name;
+    public Page $page;
+    public function __construct(...$args)
+    {
+        $this->name = $args[0];
+        $useRequire = true;
+        if(count($args) > 2 )
+        {
+            $useRequire = $args[2];
+        }
+        if($useRequire == true) require("Pages/$args[1].php");
+        $this->page = new $args[1];
+    }
+
+    public static function register(string $name, string $page, bool $useRequire = true)
+    {
+        $r = new Routes($name, $page, $useRequire);
+        API::Routes()->add($r);
+        return $r;
+    }
+
+    public static function setPage(string $routeName)
+    {
+        foreach(API::Routes()->getAll() as $route)
+        {
+            if($route->name == $routeName)
+            {
+                $route->page->Show();
+                return;
+            }
+        }
+        $_404 = new _404();
+        $_404->Show();
+        Util::notify("page_show", true);
+    }
+
+    public static function getPage() {
+        $args = $_REQUEST[API::$RouteRequestStr] ?? API::getInitialRoute()->name;
+        foreach(API::Routes()->getAll() as $route)
+        {
+            if($route->name == $routeName)
+            {
+                return $route->page;
+            }
+        }
+        $_404 = new _404();
+        return $_404;
+    }
+
+
+    public static function CheckRoute() {
+        $args = $_REQUEST[API::$RouteRequestStr] ?? API::getInitialRoute()->name;
+        Routes::setPage($args);
+
+    }
+}

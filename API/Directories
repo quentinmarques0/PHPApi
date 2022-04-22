@@ -1,0 +1,32 @@
+<?php
+class Directories {
+    private static function _combine($d1,$d2)
+    {
+        if($d1 == "") return $d2;
+        return $d1."/".$d2;
+    }
+    public static function get_server_document_root() { return $_SERVER['DOCUMENT_ROOT']; }
+    public static function combine(...$dirs) { $cDir = ""; foreach($dirs as $dir) $cDir = Directories::_combine($cDir,$dir); return $cDir; }
+    public static function exists($path)
+    {
+        $result = file_exists($path);
+        if($result != 1) System::DebugClass("[Class: Directories]","[Function: exists]","Path: $path", "Result: $result");
+        return $result;
+    }
+    public static function get($d) { 
+
+        
+        if(Directories::exists($d))
+        {
+            return $d;
+        }
+
+        if(Directories::exists(Directories::combine(Directories::get_server_document_root(),$d)))
+        {
+            return $d;
+        }
+
+        mkdir($d);
+        return Directories::get($d);
+     }
+};

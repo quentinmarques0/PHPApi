@@ -1,0 +1,25 @@
+<?php
+using("List/ListNotifies");
+class Notify {
+    private string $name;
+    private $value;
+    public function __construct(string $str, $val = null)
+    {
+        $this->name = $str;
+        $this->value = $val;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function setValue($val)
+    {
+        $this->value = $val;
+    }
+}

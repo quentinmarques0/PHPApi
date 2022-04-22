@@ -1,0 +1,34 @@
+<?php
+class ListRoutes {
+    private $routesArray = array();
+    public function get($key) { 
+        $route = null;
+        
+        foreach($this->routesArray as $routes)
+        {
+            if($module->_get(0) == $key)
+            {
+                $route = $routes;
+            }
+        }
+
+        return $route;
+    }
+    public function getAll(){
+        $mArray = array();
+        foreach($this->routesArray as $routes)
+        {
+            array_push($mArray, $routes);
+        }
+        return $mArray;
+    }
+
+    public function add($route) { 
+        array_push( $this->routesArray, $route );
+    }
+
+    public function size()
+    {
+        return count($this->routesArray);
+    }
+}

@@ -1,0 +1,31 @@
+<?php
+using("Notify");
+class Util {
+    public static ListNotifies $Notifies;
+    public static function waittill($str, $fn)
+    {
+        foreach(Util::$Notifies->getAll() as $notify)
+        {
+            if($notify->getName() == $str)
+            {
+                if($notify->getValue() != null)
+                {
+                    $fn($notify->getValue());
+                }
+            }
+        }
+    }
+
+    public static function notify($str, $val)
+    {
+        foreach(Util::$Notifies->getAll() as $notify)
+        {
+            if($notify->getName() == $str)
+            {
+                $notify->setValue($val);
+                return;
+            }
+        }
+        Util::$Notifies->add(new Notify($str, $val));
+    }
+}

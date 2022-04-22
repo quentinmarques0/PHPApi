@@ -1,0 +1,9 @@
+<?php
+class Files {
+    public static function exists($path)
+    {
+        $result = file_exists($path);
+        if($result != 1) System::DebugClass("[Class: Files]","[Function: exists]","Path: $path", "Result: $result");
+        return $result;
+    }
+}

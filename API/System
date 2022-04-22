@@ -1,0 +1,23 @@
+<?php
+
+function tag($t) { return "<$t>"; }
+
+class System {
+    private static bool $DEBUG = false;
+    public static function DebugClass(...$args) { 
+        if(System::$DEBUG) { 
+            foreach($args as $arg) { 
+                echo tag("p").$arg.tag("/p"); 
+            } echo tag("br"); 
+        } 
+    }
+    public static function Debug(...$args) { 
+        if(System::$DEBUG) { 
+            foreach($args as $arg) { 
+                echo tag("p").$arg.tag("/p"); 
+            } 
+            echo tag("br"); 
+            return null; 
+        } 
+    }
+}
