@@ -1,5 +1,7 @@
 [PayPal Checkout](https://www.paypal.com/merchantapps/appcenter/acceptpayments/checkout?locale.x=fr_FR&country.x=FR)
-### OK
+### {{ __do_php }}
+### {% __module_name %}
+### {# __translate #}
 
     API
      |
