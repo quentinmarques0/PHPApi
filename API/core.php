@@ -41,3 +41,27 @@ function split(string $pattern, string $string, int $limit = PHP_INT_MAX)
 {
     return explode($pattern, $string, $limit);
 }
+function str_contains_any(...$args)
+{
+    $str = $args[0];
+    for($i = 1; $i < count($args); $i++)
+    {
+        if(str_contains($args[$i], $str))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+function str_contains_any_pairs(...$args)
+{
+    $str = $args[0];
+    for($i = 1; $i < count($args); $i++)
+    {
+        if(str_contains($args[$i][0], $str) && str_contains($args[$i][1], $str))
+        {
+            return true;
+        }
+    }
+    return false;
+}

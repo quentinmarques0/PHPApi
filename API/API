@@ -56,14 +56,18 @@ class API {
         $action = 0;
         $postAction = 1;
         $arg = "";
+        $baseArg = "";
+        $chars = ["",""];
         if(str_contains($line, "{{") && str_contains($line, "}}")){
             $action = Core::StartPHP()." echo";
             $postAction = "".Core::EndPHP();
             $arg = $line;
             $arg = split("{{", $arg)[1];
             $arg = split("}}", $arg)[0];
+            $baseArg = $arg;
             $arg = trim($arg);
 
+            $chars = ["{","}"];
 
             $prevChars = split("{{", $line)[0];
             $nextChars = split("}}", $line)[1];
@@ -74,7 +78,11 @@ class API {
             $arg = $line;
             $arg = split("{%", $arg)[1];
             $arg = split("%}", $arg)[0];
+            $baseArg = $arg;
+
             $arg = '"'.trim($arg).'"';
+
+            $chars = ["%","%"];
 
             $prevChars = split("{%", $line)[0];
             $nextChars = split("%}", $line)[1];
@@ -85,17 +93,40 @@ class API {
             $arg = $line;
             $arg = split("{#", $arg)[1];
             $arg = split("#}", $arg)[0];
+            $baseArg = $arg;
+
             $arg = '"'.trim($arg).'"';
+
+            $chars = ["#","#"];
 
             $prevChars = split("{#", $line)[0];
             $nextChars = split("#}", $line)[1];
         }
 
         //echo $action;
-        if($action == 0) return $line;
+        if($action == 0) {
+
+            $line = str_replace('fsrc="','fsource="', $line);
+            $line = str_replace('fhref="','fhtmlref="', $line);
+
+            /*if(str_contains("http",split($line, 'src="')[1]))
+            {
+                return $line;
+            }*/
+            
+            $line = str_replace('src="','src="'.Templates::get_directory().'/', $line);
+            $line = str_replace('href="','href="'.Templates::get_directory().'/', $line);
+
+            $line = str_replace('fsource="','src="', $line);
+            $line = str_replace('fhtmlref="','href="', $line);
+            $baseArg = $arg;
+
+            
+            return $line;
+        }
 
 
-        $line = str_replace("{{", "", $line);
+        /*$line = str_replace("{{", "", $line);
         $line = str_replace("}}","",$line);
 
         //Use_module
@@ -104,15 +135,25 @@ class API {
 
         //Translate Language
         $line = str_replace("{#", "", $line);
-        $line = str_replace("#}","",$line);
+        $line = str_replace("#}","",$line);*/
 
         //$arg = trim($line);
         //echo $arg;
 
-        $code = $prevChars.$action.' '.$arg.' '.$postAction.$nextChars;
-
+        $code = $action.' '.$arg.' '.$postAction;
+        $line = str_replace("{".$chars[0].$baseArg.$chars[1]."}", $code, $line);
+        //echo $line;
+        if(str_contains_any_pairs($line,
+                                ["{{", "}}"], 
+                                ["{%", "%}"], 
+                                ["{#", "#}"]
+                                )
+            )
+        {
+            return API::Translate($line);
+        }
         //echo $code;
-        return $code;
+        return $line;
     }
 
     public static function RequireTranslate($_file)

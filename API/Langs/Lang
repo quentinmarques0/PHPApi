@@ -13,7 +13,8 @@ class Lang {
             $splitArray = split("=", $line);
             if(trim($splitArray[0]) == $str)
             {
-                return trim($splitArray[1]);
+                //Make sure the value is not a key to translate.
+                return Lang::Translate(trim($splitArray[1]));
             }
         }
         return $str;
