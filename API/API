@@ -1,6 +1,7 @@
 <?php
 using("System");
 using("Util");
+using("Database");
 Util::$Notifies = new ListNotifies();
 
 using("Langs/Lang");
@@ -215,6 +216,7 @@ class API {
                 $line = $line.$newLine;
             }
         }
+        //echo $_file;
         eval(Core::EndPHP()."$line");
     }
 

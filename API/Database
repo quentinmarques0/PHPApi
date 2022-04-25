@@ -1,0 +1,12 @@
+<?php
+
+  class DB {
+
+    public static function parse($file)
+    {
+
+    }
+
+  }
+
+  class Database extends DB {}

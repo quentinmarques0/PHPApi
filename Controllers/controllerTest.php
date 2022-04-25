@@ -1,7 +1,7 @@
 <?php
 
 class controllerTest extends Controller {
-    
+
     public function __construct(...$args)
     {
         Templates::using("simple");
@@ -17,14 +17,4 @@ class controllerTest extends Controller {
         parent::Update();
     }
 
-    public function getm(...$args)
-    {
-        return parent::GetModules("header");
-    }
-
-    public function getf(...$args)
-    {
-        $arg = $args[0] ?? null;
-        return parent::GetFunctions($arg);
-    }
 }
