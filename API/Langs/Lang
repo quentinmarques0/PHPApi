@@ -13,8 +13,23 @@ class Lang {
             $splitArray = split("=", $line);
             if(trim($splitArray[0]) == $str)
             {
+                $value = $splitArray[1];
+                if(str_contains($value, "{+") and str_contains($value, "+}") and str_contains($value, "|")){
+                    $arg = $value;
+                    $arg = split("{+", $arg)[1];
+                    $arg = split("+}", $arg)[0];
+                    $baseArg = $arg;
+                    $arg = split("|", $baseArg);
+                    $arg = Lang::Translate(trim($arg[0])).' '.Lang::Translate(trim($arg[1]));
+                    //$arg = '"'.trim($).'"';
+        
+                    $chars = ["+","+"];
+
+                    $code = $arg;
+                    $value = str_replace("{".$chars[0].$baseArg.$chars[1]."}", $code, $value);
+                }
                 //Make sure the value is not a key to translate.
-                return Lang::Translate(trim($splitArray[1]));
+                return Lang::Translate(trim($value));
             }
         }
         return $str;

@@ -158,9 +158,14 @@ class Templates {
         Templates::$_template = $temp;
     }
 
-    public static function set_mod_args($args) {
+    public static function set_mod_args(...$args) {
         global $template_module_args;
         $template_module_args = $args;
+    }
+
+    public static function get_mod_args(){
+        global $template_module_args;
+        return $template_module_args;
     }
 
 }

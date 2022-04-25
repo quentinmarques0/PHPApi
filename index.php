@@ -23,7 +23,7 @@ function get_related_products()
         );
     }
 
-    API::setController("controllerTest");
+    API::setController("HomeController");
     
     API::setInitialRoute("home", "HomePage");
     //$t = new cTest();
