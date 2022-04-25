@@ -1,0 +1,2 @@
+Script=API/Syntax/SDB.ini;
+-> * @ test : firstname = 'Quentin' & name = 'Marques';
