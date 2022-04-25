@@ -1,17 +1,12 @@
 <?php
     require("API/core.php");
-
     using("API");
+
     require("scripts/items.php");
 
-    //API::setController("HomeController");
 
-    Routes::register("contact", "ContactPage");
+    Routes::register("contact", "ContactPage");// registering a route for contact page
     API::setInitialRoute("home", "HomePage");
-    //$t = new cTest();
-    //var_dump($t->getm());
 
-    Routes::CheckRoute();
-
-
+    Routes::CheckRoute(); //Redirect to the correct page... or Error page !
 ?>
