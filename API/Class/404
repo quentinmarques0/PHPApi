@@ -1,14 +1,19 @@
 <?php
 class _404 extends Page {
-    public function __construct(...$args) {
-        Templates::using("spaceman");
+    public function __construct(...$args) {}
+
+    public function Start()
+    {
+      API::setController("_404Controller");
+      $this->Show();
     }
+
     public function Show() {
         parent::html();
 
         parent::buildHead(function(){
             Templates::use_module("css");
-            
+
             parent::title("404 Error - Page not found");
             echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
         });

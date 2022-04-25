@@ -1,6 +1,7 @@
 <?php
 class Page {
     private Templates $template;
+    private Controller $controller;
     private bool $_html = false;
     private bool $_head = false;
     private bool $_body = false;
@@ -8,6 +9,12 @@ class Page {
 
     public function __construct(...$args){
         Templates::using($args[0]);
+        //$this->controller = new Controller();
+    }
+
+    public function Start()
+    {
+      //API::setBaseController("Controller");
     }
 
     public function getTemplate()
@@ -32,7 +39,7 @@ class Page {
 
     public function Show()
     {
-        
+
     }
 
     public function HTML(...$args) {
@@ -65,7 +72,7 @@ class Page {
         $this->body();
 
         $fn();
-        
+
         $this->body();
     }
     public function buildHead($fn)
@@ -73,7 +80,7 @@ class Page {
         $this->head();
 
         $fn();
-        
+
         $this->head();
     }
 }

@@ -14,6 +14,12 @@ using("Web/Routes");
 
 
 class API {
+    public static string $RoutesPHPFunction = "aphpi_dofunc_";
+    public static string $SaveFunction = "aphpi_savefunc_";
+    public static string $REQUESTS = "aphpi_requests_";
+    public static string $PHPAction = "aphpi_action_";
+    public static string $APIoldPage = "op";
+
     private static Routes $_Route;
     private static Controller $_Controller;
     private static ListRoutes $Routes;
@@ -24,10 +30,72 @@ class API {
 
     public static function init()
     {
+        session_start();
+
+        define("APIPAGENAME", "ses_api_pn");
+        define("APIOLDURL", "ses_api_ourl");
+        define("APINEXTURL", "ses_api_nurl");
+        define("APIFUNC", "ses_api_func");
+        define("APITEMPLATE", "ses_api_temp");
+        if(!isset($_SESSION[APIPAGENAME])) API::UpdateAPISesPageName();
+        if(!isset($_SESSION[APIOLDURL])) API::UpdateAPISesOUrl();
+        if(!isset($_SESSION[APINEXTURL])) API::UpdateAPISesNUrl();
+        if(!isset($_SESSION[APIFUNC])) API::UpdateAPIFunc();
+        if(!isset($_SESSION[APITEMPLATE])) API::UpdateAPITemplate();
+
+
         API::$Routes = new ListRoutes();
 
         $route404 = Routes::register("404", "_404", false);
         $route404->page = new _404();
+    }
+
+    public static function GetURL()
+    {
+      return "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    }
+
+    public static function getSavedFunc()
+    {
+      return $_SESSION[APIFUNC];
+    }
+
+    public static function setSavedFunc($f)
+    {
+      $_SESSION[APIFUNC] = $f;
+    }
+
+    public static function UpdateAPIFunc()
+    {
+      API::setSavedFunc("");
+    }
+
+    public static function UpdateAPITemplate()
+    {
+      $value = Templates::getName("simple");
+      $_SESSION[APITEMPLATE] =  $value;
+    }
+
+    public static function UpdateAPISesOUrl()
+    {
+      $_SESSION[APIOLDURL] = ("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+    }
+    public static function UpdateAPISesNUrl($url = null)
+    {
+      if($url == null) $url = "$_SERVER[REQUEST_URI]";
+      $_SESSION[APINEXTURL] = ("http://$_SERVER[HTTP_HOST]/$url");
+    }
+
+
+    public static function UpdateAPISesPageName()
+    {
+      $_SESSION[APIPAGENAME] = ($_REQUEST[API::$RouteRequestStr] ?? "home");
+    }
+
+    public static function setBaseController(string $controller)
+    {
+      //require("$controller");
+      API::$_Controller = new $controller;
     }
 
     public static function setController(string $controller)
@@ -108,7 +176,7 @@ class API {
 
             $line = str_replace('fsrc="','fsource="', $line);
             $line = str_replace('fhref="','fhtmlref="', $line);
-            
+
             $line = str_replace('src="','src="'.Templates::get_directory().'/', $line);
             $line = str_replace('href="','href="'.Templates::get_directory().'/', $line);
 
@@ -116,7 +184,7 @@ class API {
             $line = str_replace('fhtmlref="','href="', $line);
             $baseArg = $arg;
 
-            
+
             return $line;
         }
 
@@ -124,8 +192,8 @@ class API {
         $line = str_replace("{".$chars[0].$baseArg.$chars[1]."}", $code, $line);
         //echo $line;
         if(str_contains_any_pairs($line,
-                                ["{{", "}}"], 
-                                ["{%", "%}"], 
+                                ["{{", "}}"],
+                                ["{%", "%}"],
                                 ["{#", "#}"]
                                 )
             )
@@ -149,7 +217,7 @@ class API {
         }
         eval(Core::EndPHP()."$line");
     }
-    
+
 }
 
 API::init();

@@ -32,7 +32,7 @@ class Templates {
     {
         return $this->functions;
     }
-    
+
     public static function args(...$args) {
         return $args;
     }
@@ -45,7 +45,7 @@ class Templates {
         global $template_directory;
 
         $path = Directories::get("templates");
-    
+
         //get templates registered informations in 'register_template.php'                                                          (19/04/2022 14:03) Quentin M.
         Templates::set(Templates::register($path, $template_str));
         return Templates::get();
@@ -57,11 +57,11 @@ class Templates {
         global $template_directory;
         $full_dir_path = Directories::combine($path, $template_str);
         $full_dir_path = Directories::get($full_dir_path);
-    
+
         $template_directory = $full_dir_path;
-    
+
         $register_template_file = Directories::combine($full_dir_path, "register_template.php");
-    
+
         //echo $register_template_file;
         if(Files::exists($register_template_file))
         {
@@ -105,17 +105,17 @@ class Templates {
 
     public static function use_module($module_name, $args = null)
     {
-        
+
         global $last_args;
         global $template_module_args;
-    
+
         if($args != null) $template_module_args = $args[0];
-    
+
         if(Templates::get() == null) return System::Debug("Template is null", "Please register a new template","or fix your 'register_template.php'");
-    
+
         if(Templates::get()->get_modules()->size() <= 0) return System::Debug("Modules array is null", "Please register a new array 'modules'","or fix in your 'register_template.php' array");
         if(Templates::get()->get_modules()->get($module_name) == null) return System::Debug("Module '$module_name' is null", "Please register a new module '$module_name'","or fix in your 'register_template.php' array");
-    
+
         //phpref
         //echo "o";
         API::RequireTranslate(Directories::combine(Templates::get_directory(),Modules::get($module_name)));
@@ -126,10 +126,10 @@ class Templates {
     public static function use_function($function_name, $args = null)
     {
         if(Templates::get() == null) return System::Debug("Template is null", "Please register a new template","or fix your 'register_template.php'");
-    
+
         if(Templates::get()->get_functions()->size() <= 0) return System::Debug("Functions array is null", "Please register a new array 'functions'","or fix in your 'register_template.php' array");
         if(Templates::get()->get_functions()->get($function_name) == null) return System::Debug("Function '$function_name' is null", "Please register a new function '$function_name'","or fix in your 'register_template.php' array");
-    
+
         return Templates::get()->get_functions()->get($function_name)->call($args);
     }
 
@@ -151,11 +151,18 @@ class Templates {
     }
 
     public static function get() {
-        return Templates::$_template;
+        return Templates::$_template ?? null;
+    }
+
+    public static function getName($n)
+    {
+      return (Templates::$_template->name ?? $n);
     }
 
     public static function set($temp) {
         Templates::$_template = $temp;
+        API::UpdateAPITemplate();
+
     }
 
     public static function set_mod_args(...$args) {

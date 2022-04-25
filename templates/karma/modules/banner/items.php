@@ -1,6 +1,5 @@
 <?php
-    global $template_module_args;
-    $items = $template_module_args;
+    $items = Templates::get_mod_args();
 	global $banneritem;
     foreach($items as $banneritem): ?>
 

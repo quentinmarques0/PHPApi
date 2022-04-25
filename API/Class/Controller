@@ -16,7 +16,7 @@ class Controller {
     }
 
     public function Update(...$args) {
-        
+
         Util::waittill("page_show", function($args1){
             if($args1 == true) return;
         });
@@ -36,7 +36,7 @@ class Controller {
         if(count($args) <= 0) return $this->GetTemplate()->get_modules();
         if(count($args) == 1 && $args[0] == null) return $this->GetTemplate()->get_modules();
 
-        if($args[0] == '*') 
+        if($args[0] == '*')
         {
             return $this->GetTemplate()->get_modules()->getAll();
         }
@@ -81,7 +81,7 @@ class Controller {
         if(count($args) <= 0) return $this->GetTemplate()->get_functions();
         if(count($args) == 1 && $args[0] == null) return $this->GetTemplate()->get_functions();
 
-        if($args[0] == '*') 
+        if($args[0] == '*')
         {
             return $this->GetTemplate()->get_functions()->getAll();
         }

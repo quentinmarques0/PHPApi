@@ -1,5 +1,6 @@
 <?php
 using("Web/List/ListRoutes");
+using("Class/_func_pageAPI");
 
 class Routes {
     public string $name;
@@ -29,12 +30,18 @@ class Routes {
         {
             if($route->name == $routeName)
             {
-                $route->page->Show();
+                $route->page->Start();
                 return;
             }
         }
+        if($routeName == API::$RoutesPHPFunction)
+        {
+          $funcPage = new _func_pageAPI();
+          $funcPage->Start();
+          return;
+        }
         $_404 = new _404();
-        $_404->Show();
+        $_404->Start();
         Util::notify("page_show", true);
     }
 
@@ -47,6 +54,7 @@ class Routes {
                 return $route->page;
             }
         }
+
         $_404 = new _404();
         return $_404;
     }

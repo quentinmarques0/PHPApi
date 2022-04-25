@@ -1,12 +1,11 @@
 <?php
 
 class HomeController extends Controller {
-    
-    public function __construct(...$args)
-    {
-        Templates::using("simple");
-        $this->Start();
+
+    public function __construct(...$args) {
+        Templates::using("karma");
     }
+
     public function Start(...$args)
     {
         parent::Start();
@@ -17,16 +16,6 @@ class HomeController extends Controller {
         parent::Update();
     }
 
-    public function getm(...$args)
-    {
-        return parent::GetModules("header");
-    }
-
-    public function getf(...$args)
-    {
-        $arg = $args[0] ?? null;
-        return parent::GetFunctions($arg);
-    }
     public function getItem($name, $price, $image, $sale = null)
     {
         $arr = [
@@ -70,5 +59,23 @@ class HomeController extends Controller {
         ];
         Templates::set_mod_args($title, $subtitle, $items);
     }
-}
 
+    public function getRelatedProducts()
+    {
+      Templates::set_mod_args(
+                Items::get('Nike'),
+                Items::get('Nike'),
+                Items::get('Nike'),
+                Items::get('Nike'),
+                Items::get('Nike')
+              );
+    }
+
+    public function getBannerProducts()
+    {
+      Templates::set_mod_args(
+          Banner::get("Nike <br>Collection!"),
+          Banner::get("Nike <br>Collection!")
+      );
+    }
+}

@@ -1,0 +1,24 @@
+<?php
+class _func_pageAPI extends Page {
+    public function __construct(...$args) {}
+
+    public function Start()
+    {
+      //API::setBaseController("Controller");
+
+      $this->Show();
+    }
+
+    public function Show() {
+      $requests = $_REQUEST;
+
+      if($requests[API::$PHPAction]){
+        Templates::using($_SESSION[APITEMPLATE]);
+        Templates::use_function($requests[API::$PHPAction]);
+
+        header("Location: ?".API::$RouteRequestStr."=home");
+      }
+
+      var_dump($_REQUEST);
+    }
+}
