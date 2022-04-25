@@ -1,4 +1,4 @@
 <?php global $banneritem; ?>
 <div class="banner-img">
-	<img class="img-fluid" src="<?= $banneritem['img']?>" alt="">
+	<img class="img-fluid" fsrc="<?= $banneritem['img']?>" alt="">
 </div>
