@@ -1,1 +1,1 @@
-<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+<li class="nav-item {{ ifphpref("contact","active") }}"><a class="nav-link" {{ phpref("contact") }}>Contact</a></li>

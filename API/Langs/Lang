@@ -3,11 +3,11 @@ class Lang {
     private static string $lang = "en_US";
     public static function Translate($str)
     {
-        if(!Files::exists("API/Langs/".Lang::$lang)) {
+        if(!Files::exists(Templates::get_directory()."/Lang/".Lang::$lang)) {
             return $str;
         }
         //echo $str;
-        $lines = Files::ReadAllLines("API/Langs/".Lang::$lang);
+        $lines = Files::ReadAllLines(Templates::get_directory()."/Lang/".Lang::$lang);
         foreach($lines as $line)
         {
             $splitArray = split("=", $line);
@@ -36,8 +36,9 @@ class Lang {
     }
     public static function SetLang($lang)
     {
-        if(Files::exists("API/Langs/$lang")) {
+        if(Files::exists(Templates::get_directory()."/Lang/$lang")) {
             Lang::$lang = $lang;
         }
     }
 }
+

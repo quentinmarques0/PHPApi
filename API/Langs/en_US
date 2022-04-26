@@ -1,8 +1,0 @@
-KARMA_DEALSOFTHEWEEK_HOMEPAGE         = Deals of the Week
-KARMA_DEALSOFTHEWEEK_HOMEPAGE_SUB     = Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-KARMA_SEE_BANNER_PRODUCT              = See more !
-TEST_ADD                        = {+ SEE_BANNER_PRODUCT | juste la +}
-
-KARMA_CAT_TITLE_05              = Sneaker for Sports
-
-KARMA_ADD_TO_BAG                = add to bag

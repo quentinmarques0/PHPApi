@@ -20,6 +20,7 @@ class API {
     public static string $REQUESTS = "aphpi_requests_";
     public static string $PHPAction = "aphpi_action_";
     public static string $APIoldPage = "op";
+    public static string $LangID = "ses_api_lang";
 
     private static Routes $_Route;
     private static Controller $_Controller;
@@ -32,6 +33,7 @@ class API {
     public static function init()
     {
         session_start();
+        echo $_SESSION[API::$LangID];
 
         define("APIPAGENAME", "ses_api_pn");
         define("APIOLDURL", "ses_api_ourl");
@@ -43,6 +45,8 @@ class API {
         if(!isset($_SESSION[APINEXTURL])) API::UpdateAPISesNUrl();
         if(!isset($_SESSION[APIFUNC])) API::UpdateAPIFunc();
         if(!isset($_SESSION[APITEMPLATE])) API::UpdateAPITemplate();
+        if(!isset($_SESSION[API::$LangID])) $_SESSION[API::$LangID] = "en_US";
+
 
 
         API::$Routes = new ListRoutes();
@@ -75,6 +79,14 @@ class API {
     {
       $value = Templates::getName("simple");
       $_SESSION[APITEMPLATE] =  $value;
+
+      if(isset($_REQUEST[API::$LangID]))
+      {
+          $_SESSION[API::$LangID] = $_REQUEST[API::$LangID];
+      }
+
+      Lang::SetLang($_SESSION[API::$LangID]);
+      
     }
 
     public static function UpdateAPISesOUrl()
@@ -122,6 +134,8 @@ class API {
 
     public static function Translate($line)
     {
+        //JSlog($line);
+
         $action = 0;
         $postAction = 1;
         $arg = "";
@@ -185,7 +199,7 @@ class API {
             $line = str_replace('fhtmlref="','href="', $line);
             $baseArg = $arg;
 
-
+            //echo $line;
             return $line;
         }
 
@@ -207,6 +221,7 @@ class API {
     public static function RequireTranslate($_file)
     {
         $line = "";
+        $i = 0;
         if($file = fopen($_file, "r")){
             while(!feof($file)){
                 $newLine = fgets($file);
@@ -214,6 +229,13 @@ class API {
                 $newLine = API::Translate($newLine);
                 //echo $newLine;
                 $line = $line.$newLine;
+                /*JSLog("[File: $_file][Line: $i]");
+                echo "\n";
+
+                JSLog(trim($newLine));
+                echo "\n";
+                echo "\n";*/
+                $i++;
             }
         }
         //echo $_file;
@@ -232,4 +254,26 @@ function phpref($ref, $tag = "href")
 function phpvar($key, $value)
 {
     return "name=$key value=$value";
+}
+
+function ifphpref($route, $iftrue)
+{
+    if($_REQUEST[API::$RouteRequestStr] == $route)
+    {
+        return $iftrue;
+    }
+    return "";
+}
+
+function ifanyphpref($arr, $iftrue)
+{
+    foreach($arr as $route)
+    {
+        $result = ifphpref($route, $iftrue) ;
+        if($result !== "")
+        {
+            return $result;
+        }
+    }
+    return "";
 }

@@ -9,11 +9,6 @@ class Routes {
     {
         $this->name = $args[0];
         $useRequire = true;
-        if(count($args) > 2 )
-        {
-            $useRequire = $args[2];
-        }
-        if($useRequire == true) require("Pages/$args[1].php");
         $this->page = new $args[1];
     }
 

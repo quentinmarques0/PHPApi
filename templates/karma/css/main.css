@@ -58,7 +58,7 @@
   background: -webkit-linear-gradient(90deg, #ffba00 0%, #ff6c00 100%);
   background: -moz-linear-gradient(90deg, #ffba00 0%, #ff6c00 100%);
   background: -o-linear-gradient(90deg, #ffba00 0%, #ff6c00 100%);
-  background: linear-gradient(90deg, #ffba00 0%, #ff6c00 100%); }
+  background: linear-gradient(90deg, #c92929 0%, #ff5f5f 100%); }
 
 .gradient-bg-reverse, #search_input_box {
   background: -webkit-linear-gradient(270deg, #ffba00 0%, #ff6c00 100%);
@@ -1263,7 +1263,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 50px;
     width: 50px;
     line-height: 52px;
-    text-align: right;
+    /* text-align: right; */
     border-radius: 50%;
     box-shadow: 0 10px 20px rgba(255, 108, 0, 0.2); }
     .add-bag .add-btn span {

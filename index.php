@@ -2,6 +2,9 @@
     require("API/core.php");
     using("API");
 
+    API::RequireTranslate("Pages/HomePage.php");
+    API::RequireTranslate("Pages/ContactPage.php");
+
     require("scripts/items.php");
 
 

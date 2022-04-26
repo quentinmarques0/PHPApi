@@ -14,7 +14,7 @@
             parent::HTML();
             parent::buildHead(function(){
                 Templates::use_module("home-meta");
-                parent::title("Test");
+                parent::title("Karma Shop");
                 Templates::use_module("home-css");
             });
 
@@ -27,15 +27,10 @@
                 Templates::use_module("products-area");
                 Templates::use_module("deal-area");
                 Templates::use_module("brand-area");
-
-                Templates::use_module("home-related-products", API::getController()->getRelatedProducts());   //$template_module_args
-
-
-
-                Templates::use_function("log", Templates::args("arrh!"));
+                Templates::use_module("related-products", API::getController()->getRelatedProducts());   //$template_module_args
 
                 Templates::use_module("footer");
-                Templates::use_module("home-scripts");
+                Templates::use_module("scripts");
             });
             parent::HTML();
             //parent::Show();
